@@ -58,17 +58,21 @@
             color: #e74c3c;
             font-weight: bold;
         }
+
+        .varattu {
+            background-color: #e74c3c;
+        }
     </style>
 </head>
 <body>
 <%- include('yhteiset/header') %>
     <div class="menu-container">
         <div class="menu-grid">
-            <% pizzas.forEach(pizza => { %>
-                <div class="menu-item">
-                    <h3><%= pizza.name %></h3>
-                    <p><%= pizza.description %></p>
-                    <p class="price"><%= pizza.price %> €</p>
+            <% pöydät.forEach(pöytä => { %>
+                <div class="menu-item <%= pöytä.vapaa ? 'varattu': 'hlöhöhö' %>">
+                    <h3>Pöytä <%= pöytä.pöytä_id %></h3>
+                    <p>Paikkoja: <%= pöytä.koko %></p>
+                    <p>Varattu: <%= pöytä.vapaa %></p>
                 </div>
             <% }); %>
         </div>
