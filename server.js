@@ -156,6 +156,6 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.render('menu', { pizzas, title: 'etusivu' });
+  res.render('menu', { pizzas, title: 'Etusivu' });
 });
 app.listen(port, host, () => console.log(`${host}:${port} kuuntelee...`));
