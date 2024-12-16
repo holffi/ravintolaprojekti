@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizzerian Menu</title>
+    <link href="./style.css" rel="stylesheet" />
+    <script src="./varaushallinta.js" defer></script>
+  </head>
+  <body>
+    <%- include('yhteiset/header') %>
+    <div class="menu-container">
+      <% if (!kirjautunut){ %>
+      <div class="kirjautuminen">
+        <form method="post">
+          <div>
+            <label for="tunnus"> Tunnus: </label>
+            <input name="tunnus" id="tunnus" type="text" />
+          </div>
+          <div>
+            <label for="salasana"> Salasana: </label>
+            <input name="salasana" id="salasana" type="password" />
+          </div>
+          <div>
+            <button type="submit">Kirjaudu sisään</button>
+          </div>
+        </form>
+      </div>
+      <% } else { %>
+      <div class="menu-grid">
+        <% pöydät.forEach(pöytä => { %>
+        <div class="menu-item <%= pöytä.vapaa ? 'varattu': 'hlöhöhö' %>">
+          <h3>Pöytä <%= pöytä.pöytä_id %></h3>
+          <p>Paikkoja: <%= pöytä.koko %></p>
+          <p>Varattu: <%= pöytä.vapaa %></p>
+          <button
+            class="muutos"
+            data-id="<%= pöytä.pöytä_id %>"
+            data-vapaa="<%= pöytä.vapaa %>"
+          >
+            Muuta varausta
+          </button>
+        </div>
+        <% }); %>
+      </div>
+      <div>
+        <a href="./logout">Kirjaudu ulos</a>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>

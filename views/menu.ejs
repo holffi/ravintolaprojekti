@@ -1,77 +1,23 @@
 <!DOCTYPE html>
 <html lang="fi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pizzerian Menu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-
-        header {
-            background-color: #e74c3c;
-            color: white;
-            text-align: center;
-            padding: 1.5rem 0;
-            font-size: 1.8rem;
-        }
-
-        .menu-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .menu-item {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .menu-item h3 {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .menu-item p {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-
-        .menu-item .price {
-            font-size: 1.1rem;
-            color: #e74c3c;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-<%- include('yhteiset/header') %>
+    <link href="./style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <%- include('yhteiset/header') %>
     <div class="menu-container">
-        <div class="menu-grid">
-            <% pizzas.forEach(pizza => { %>
-                <div class="menu-item">
-                    <h3><%= pizza.name %></h3>
-                    <p><%= pizza.description %></p>
-                    <p class="price"><%= pizza.price %> €</p>
-                </div>
-            <% }); %>
+      <div class="menu-grid">
+        <% pizzas.forEach(pizza => { %>
+        <div class="menu-item">
+          <h3><%= pizza.name %></h3>
+          <p><%= pizza.description %></p>
+          <p class="price"><%= pizza.price %> €</p>
         </div>
+        <% }); %>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -1,12 +1,25 @@
+require('dotenv').config();
 const express = require('express');
 const db = require('./db');
+const session = require('express-session');
 const app = express();
 
 const port = 3000;
 const host = 'localhost';
 
 app.set('view engine', 'ejs');
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static('public'));
+const ses = {
+  secret: 'wet4',
+  cookie: {},
+};
+if (process.env === 'production') {
+  app.set('trust proxy', 1);
+  ses.cookie.secure = true;
+}
+app.use(session(ses));
 // Pizza-menu
 const pizzas = [
   {
@@ -102,11 +115,47 @@ const pizzas = [
 app.get('/varaus', (req, res) => {
   const sql = 'SELECT * FROM pöydät;';
   db.all(sql, function (virhe, pöydät) {
-    res.render('varaus', { pöydät });
+    res.render('varaus', { pöydät, title: 'Vapaat pöydät' });
+  });
+});
+
+app.post('/varaus', (req, res) => {
+  console.log(req.body.id);
+  const sql = 'UPDATE pöydät SET vapaa = ? WHERE pöytä_id = ?;';
+  db.run(sql, [req.body.vapaa, req.body.id]);
+  res.send({ vastaus: 'valmis' });
+});
+
+app.get('/varaushallinta', (req, res) => {
+  const kirjautunut = req.session.kirjautunut;
+  const sql = 'SELECT * FROM pöydät;';
+  db.all(sql, function (virhe, pöydät) {
+    res.render('varaushallinta', {
+      pöydät,
+      kirjautunut,
+      title: 'Varaushallinta',
+    });
+  });
+});
+
+app.post('/varaushallinta', (req, res) => {
+  console.log(req.body);
+  if (req.body.tunnus === 'admin' && req.body.salasana === '12345') {
+    req.session.kirjautunut = true;
+    res.redirect('./varaushallinta');
+    return;
+  }
+  req.session.kirjautunut = false;
+  res.send('tunnus tai salasana väärin');
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(function () {
+    res.redirect('./varaushallinta');
   });
 });
 
 app.get('/', (req, res) => {
-  res.render('menu', { pizzas });
+  res.render('menu', { pizzas, title: 'etusivu' });
 });
 app.listen(port, host, () => console.log(`${host}:${port} kuuntelee...`));
