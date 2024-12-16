@@ -1,11 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('./db');
-const sqliteStoreFactory = require('express-session-sqlite');
 const session = require('express-session');
+const sqliteStore = require('better-sqlite3-session-store')(session);
 const app = express();
-
-const sqliteStore = sqliteStoreFactory(session);
 
 const port = process.env.PORT || 8080;
 const host = 'localhost';
@@ -16,11 +14,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 const ses = {
   secret: 'wet4',
+  resave: true,
+  saveUninitialized: false,
   cookie: {},
   store: new sqliteStore({
-    driver: sqlite3.Database,
-    path: 'sqlite.db',
-    ttl: 1234,
+    client: db,
   }),
 };
 if (process.env === 'production') {
@@ -122,27 +120,26 @@ const pizzas = [
 
 app.get('/varaus', (req, res) => {
   const sql = 'SELECT * FROM pöydät;';
-  db.all(sql, function (virhe, pöydät) {
-    res.render('varaus', { pöydät, title: 'Vapaat pöydät' });
-  });
+  const pöydät = db.prepare(sql).all();
+  res.render('varaus', { pöydät, title: 'Vapaat pöydät' });
 });
 
 app.post('/varaus', (req, res) => {
   console.log(req.body.id);
   const sql = 'UPDATE pöydät SET vapaa = ? WHERE pöytä_id = ?;';
-  db.run(sql, [req.body.vapaa, req.body.id]);
+  const haku = db.prepare(sql);
+  haku.run(req.body.vapaa, req.body.id);
   res.send({ vastaus: 'valmis' });
 });
 
 app.get('/varaushallinta', (req, res) => {
   const kirjautunut = req.session.kirjautunut;
   const sql = 'SELECT * FROM pöydät;';
-  db.all(sql, function (virhe, pöydät) {
-    res.render('varaushallinta', {
-      pöydät,
-      kirjautunut,
-      title: 'Varaushallinta',
-    });
+  const pöydät = db.prepare(sql).all();
+  res.render('varaushallinta', {
+    pöydät,
+    kirjautunut,
+    title: 'Varaushallinta',
   });
 });
 
