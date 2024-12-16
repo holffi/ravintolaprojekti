@@ -17,6 +17,6 @@ try {
   db.exec(lisää, [6, 1]);
   db.exec(lisää, [2, 0]);
 } catch (error) {
-  console.log('taulu on jo olemassa');
+  console.log('Taulu on jo olemassa');
 }
 module.exports = db;
