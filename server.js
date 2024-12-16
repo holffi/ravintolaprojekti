@@ -1,8 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('./db');
+const sqliteStoreFactory = require('express-session-sqlite');
 const session = require('express-session');
 const app = express();
+
+const sqliteStore = sqliteStoreFactory(session);
 
 const port = process.env.PORT || 8080;
 const host = 'localhost';
@@ -14,6 +17,11 @@ app.use(express.static('public'));
 const ses = {
   secret: 'wet4',
   cookie: {},
+  store: new sqliteStore({
+    driver: sqlite3.Database,
+    path: 'sqlite.db',
+    ttl: 1234,
+  }),
 };
 if (process.env === 'production') {
   app.set('trust proxy', 1);
