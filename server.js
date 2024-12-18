@@ -6,7 +6,6 @@ const Table = require('./model');
 const app = express();
 
 const port = process.env.PORT || 3000;
-const host = 'localhost';
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -173,5 +172,5 @@ app.use(function (req, res, next) {
 
 (async function () {
   await mongoConnect();
-  app.listen(port, host, () => console.log(`${host}:${port} kuuntelee...`));
+  app.listen(port, () => console.log(`${host}:${port} kuuntelee...`));
 })();
