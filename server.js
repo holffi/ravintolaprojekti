@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const db = require('./db');
 const session = require('express-session');
-const sqliteStore = require('better-sqlite3-session-store')(session);
+const mongoConnect = require('./db');
+const Table = require('./model');
 const app = express();
 
 const port = process.env.PORT || 8080;
@@ -17,9 +17,6 @@ const ses = {
   resave: true,
   saveUninitialized: false,
   cookie: {},
-  store: new sqliteStore({
-    client: db,
-  }),
 };
 if (process.env === 'production') {
   app.set('trust proxy', 1);
@@ -118,24 +115,26 @@ const pizzas = [
   },
 ];
 
-app.get('/varaus', (req, res) => {
-  const sql = 'SELECT * FROM pöydät;';
-  const pöydät = db.prepare(sql).all();
+app.get('/varaus', async function (req, res) {
+  const pöydät = await Table.find();
   res.render('varaus', { pöydät, title: 'Vapaat pöydät' });
 });
 
-app.post('/varaus', (req, res) => {
+app.post('/varaus', async function (req, res) {
   console.log(req.body.id);
-  const sql = 'UPDATE pöydät SET vapaa = ? WHERE pöytä_id = ?;';
-  const haku = db.prepare(sql);
-  haku.run(req.body.vapaa, req.body.id);
-  res.send({ vastaus: 'valmis' });
+  const vastaus = await Table.findByIdAndUpdate(
+    req.body.id,
+    {
+      vapaa: req.body.vapaa,
+    },
+    { new: true }
+  );
+  res.send(vastaus);
 });
 
-app.get('/varaushallinta', (req, res) => {
+app.get('/varaushallinta', async function (req, res) {
   const kirjautunut = req.session.kirjautunut;
-  const sql = 'SELECT * FROM pöydät;';
-  const pöydät = db.prepare(sql).all();
+  const pöydät = await Table.find();
   res.render('varaushallinta', {
     pöydät,
     kirjautunut,
@@ -163,4 +162,8 @@ app.get('/logout', (req, res) => {
 app.get('/', (req, res) => {
   res.render('menu', { pizzas, title: 'Etusivu' });
 });
-app.listen(port, host, () => console.log(`${host}:${port} kuuntelee...`));
+
+(async function () {
+  await mongoConnect();
+  app.listen(port, host, () => console.log(`${host}:${port} kuuntelee...`));
+})();

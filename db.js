@@ -1,22 +1,20 @@
-const sqlite3 = require('better-sqlite3');
+require('dotenv').config();
+const mongoose = require('mongoose');
+//const Table = require('./model');
 
-const tietokanta = 'tietokanta.sqlite';
-const db = new sqlite3(tietokanta);
-try {
-  // Pöydät taulu
-  const query = `CREATE TABLE pöydät (
-        pöytä_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        koko INTEGER,
-        vapaa INTEGER
-        )`;
-  db.exec(query);
-  const lisää = 'INSERT INTO pöydät (koko, vapaa) VALUES (?, ?)';
-  db.exec(lisää, [4, 0]);
-  db.exec(lisää, [4, 0]);
-  db.exec(lisää, [4, 1]);
-  db.exec(lisää, [6, 1]);
-  db.exec(lisää, [2, 0]);
-} catch (error) {
-  console.log('Taulu on jo olemassa');
-}
-module.exports = db;
+const mongoConnect = async () => {
+  try {
+    if (!process.env.DB_URL) {
+      throw 'DATABASE_URL not set!';
+    }
+    const connection = await mongoose.connect(process.env.DB_URL);
+    console.log('DB connected successfully');
+    return connection;
+  } catch (error) {
+    console.error('Connection to db failed: ', error.message);
+  }
+};
+
+//const pöytä1 = new Table({ koko: 3, vapaa: true });
+//pöytä1.save();
+module.exports = mongoConnect;

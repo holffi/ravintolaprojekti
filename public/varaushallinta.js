@@ -12,8 +12,8 @@ async function muutaVarausta(id, vapaa) {
   };
   const vastaus = await fetch('./varaus', options);
   const varaus = await vastaus.json();
-  console.log(varaus);
-  if (varaus.vastaus === 'valmis') {
+  console.log(data);
+  if (varaus._id === id) {
     location.href = './varaushallinta';
   }
 }
@@ -22,8 +22,7 @@ const muutosnapit = document.querySelectorAll('.muutos');
 for (let muutosnappi of muutosnapit) {
   muutosnappi.addEventListener('click', function () {
     const id = muutosnappi.dataset.id;
-    let vapaa = muutosnappi.dataset.vapaa;
-    vapaa = 1 - vapaa;
-    muutaVarausta(id, vapaa);
+    let vapaa = muutosnappi.dataset.vapaa === 'true';
+    muutaVarausta(id, !vapaa);
   });
 }

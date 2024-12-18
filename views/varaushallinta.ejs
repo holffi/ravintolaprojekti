@@ -29,13 +29,13 @@
       <% } else { %>
       <div class="menu-grid">
         <% pöydät.forEach(pöytä => { %>
-        <div class="menu-item <%= pöytä.vapaa ? 'varattu': 'hlöhöhö' %>">
-          <h3>Pöytä <%= pöytä.pöytä_id %></h3>
+        <div class="menu-item <%= pöytä.vapaa ? 'vapaa': 'varattu' %>">
+          <h3>Pöytä <%= pöytä._id %></h3>
           <p>Paikkoja: <%= pöytä.koko %></p>
-          <p>Varattu: <%= pöytä.vapaa %></p>
+          <p>Vapaa: <%= pöytä.vapaa %></p>
           <button
             class="muutos"
-            data-id="<%= pöytä.pöytä_id %>"
+            data-id="<%= pöytä._id %>"
             data-vapaa="<%= pöytä.vapaa %>"
           >
             Muuta varausta

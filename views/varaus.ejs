@@ -11,10 +11,10 @@
     <div class="menu-container">
       <div class="menu-grid">
         <% pöydät.forEach(pöytä => { %>
-        <div class="menu-item <%= pöytä.vapaa ? 'varattu': 'hlöhöhö' %>">
+        <div class="menu-item <%= pöytä.vapaa ? 'vapaa': 'varattu' %>">
           <h3>Pöytä <%= pöytä.pöytä_id %></h3>
           <p>Paikkoja: <%= pöytä.koko %></p>
-          <p>Varattu: <%= pöytä.vapaa %></p>
+          <p>vapaa: <%= pöytä.vapaa %></p>
         </div>
         <% }); %>
       </div>
