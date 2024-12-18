@@ -5,7 +5,7 @@ const mongoConnect = require('./db');
 const Table = require('./model');
 const app = express();
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 const host = 'localhost';
 
 app.set('view engine', 'ejs');
@@ -161,6 +161,14 @@ app.get('/logout', (req, res) => {
 
 app.get('/', (req, res) => {
   res.render('menu', { pizzas, title: 'Etusivu' });
+});
+
+app.get('*', (req, res) => {
+  res.render('404');
+});
+
+app.use(function (req, res, next) {
+  res.status(404).send('ei löydy');
 });
 
 (async function () {
