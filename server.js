@@ -162,6 +162,10 @@ app.get('/', (req, res) => {
   res.render('menu', { pizzas, title: 'Etusivu' });
 });
 
+app.get('/about', (req, res) => {
+  res.render('about', {title: 'Tietoa meistä'});
+});
+
 app.get('*', (req, res) => {
   res.render('404');
 });
