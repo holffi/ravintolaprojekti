@@ -172,5 +172,5 @@ app.use(function (req, res, next) {
 
 (async function () {
   await mongoConnect();
-  app.listen(port, () => console.log(`${host}:${port} kuuntelee...`));
+  app.listen(port, () => console.log(`${port} kuuntelee...`));
 })();
