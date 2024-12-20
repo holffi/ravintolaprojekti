@@ -3,6 +3,9 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f9f9f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -13,9 +16,42 @@ header {
     font-size: 1.8rem;
 }
 
+footer {
+    padding: 1.5rem 0;
+    background-color: black;
+    color: white;
+    
+    font-family: "Roboto", serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 80vw;
+    margin: 0 auto;
+}
+
+.left {
+
+}
+
+
+
+footer div ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    gap: 12px;
+}
+
+footer div ul a {
+    color: white;
+    text-decoration: none;
+}
+
 .menu-container {
-    max-width: 1200px;
-    margin: 2rem auto;
+    flex-grow: 1;
+    margin: 4rem;
     padding: 0 1rem;
 }
 
